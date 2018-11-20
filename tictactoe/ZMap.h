@@ -13,6 +13,7 @@ struct BestResult {
 
 class ZMap {
 public:
+
 	ZMap();
 	~ZMap();
 
