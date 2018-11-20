@@ -12,8 +12,8 @@ extern "C" {
 
 	TicTacToe tictactoe;
 
-	TICTACTOE_API void init(int flag) {
-		if (flag == 0) {
+	TICTACTOE_API void init(char chessType) {
+		if (chessType == 'X') {
 			tictactoe = *(new TicTacToe(X));
 		}
 		else {
