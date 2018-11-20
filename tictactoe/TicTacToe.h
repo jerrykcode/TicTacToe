@@ -54,12 +54,12 @@ public:
 
 	void updateTurnAfterComputerTurn();
 
+	bool gameOver(RESULT * pResult);
+
 private:
 
 	TICRESULT addX(int row, int col);
 	TICRESULT addO(int row, int col);
-
-	bool gameOver(RESULT * pResult);
 
 	int getBestPosition(ChessType chessType, int preBestScore, PPosition pPosition);
 

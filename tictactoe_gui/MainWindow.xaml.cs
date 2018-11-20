@@ -42,16 +42,21 @@ namespace tictactoe_gui
         [DllImport(@"TICTACTOE.dll")]
         public static extern void updateTurnAfterComputerTurn();
 
+        [DllImport(@"TICTACTOE.dll")]
+        public static extern int gameOver();
+
         private char xtype = 'X';
         private char otype = 'O';
         private char humanChessType;
         private char computerChessType;
+        private bool isGameOver;
 
         public MainWindow()
         {
             InitializeComponent();
             humanChessType = xtype;
             computerChessType = otype;
+            isGameOver = false;
             init(humanChessType);
             Button00.Click += new RoutedEventHandler(Button00_click);
             Button01.Click += new RoutedEventHandler(Button01_click);
@@ -75,16 +80,19 @@ namespace tictactoe_gui
         private void Button22_click(object sender, RoutedEventArgs e) { click(2, 2); }
 
         private void click(int row, int col)
-        {            
+        {
+            if (isGameOver) return;
             if (isValid(row, col))
             {               
                 human(row, col);
                 update(row, col, humanChessType);//update ui
+                if(checkResult()) return;
                 computer();
                 int computerRow = getComputerRow();
                 int computerCol = getComputerCol();
                 update(computerRow, computerCol, computerChessType);//update ui
                 updateTurnAfterComputerTurn();
+                if (checkResult()) return;
             }
         }
 
@@ -99,6 +107,32 @@ namespace tictactoe_gui
             if (row == 2 && col == 0) { Button20.Content = chessType; }
             if (row == 2 && col == 1) { Button21.Content = chessType; }
             if (row == 2 && col == 2) { Button22.Content = chessType; }
+        }
+
+        private bool checkResult()
+        {
+            int result = gameOver();
+            if (result == 0) return false;
+            switch (result)
+            {
+                case 1:
+                    {
+                        MessageBox.Show("Computer Won!");
+                        break;
+                    }
+                case 2:
+                    {
+                        MessageBox.Show("You Won!");
+                        break;
+                    }
+                case 3:
+                    {
+                        MessageBox.Show("Draw!");
+                        break;
+                    }
+            }
+            isGameOver = true;
+            return true;
         }
     }
 }

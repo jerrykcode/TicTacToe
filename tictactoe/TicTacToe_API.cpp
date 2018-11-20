@@ -45,6 +45,16 @@ extern "C" {
 		tictactoe.updateTurnAfterComputerTurn();
 	}
 
+	TICTACTOE_API int gameOver() {
+		RESULT result;
+		if (!tictactoe.gameOver(&result)) {
+			return 0;
+		}
+		if (result == WIN) return 1;
+		if (result == LOSE) return 2;
+		if (result == DRAW) return 3;
+	}
+
 #ifdef __cplusplus
 }
 #endif
