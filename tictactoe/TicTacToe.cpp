@@ -37,8 +37,8 @@ void TicTacToe::human(int row, int col)
 
 void TicTacToe::computer()
 {
-	PPosition pPosition;
-	getBestPosition(computerChessType, NO_ALPHA_BTEA, pPosition); //*pPosition malloc in getBestPosition
+	PPosition pPosition = (PPosition)malloc(sizeof(Position));
+	getBestPosition(computerChessType, NO_ALPHA_BTEA, pPosition);
 	computerRow = pPosition->row;
 	computerCol = pPosition->col;
 	if (computerChessType == X) {
@@ -47,6 +47,7 @@ void TicTacToe::computer()
 	else {
 		addO(computerRow, computerCol);
 	}
+	delete pPosition;
 }
 
 void TicTacToe::updateTurnAfterComputerTurn()
