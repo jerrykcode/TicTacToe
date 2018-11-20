@@ -63,8 +63,8 @@ int TicTacToe::getBestPosition(ChessType chessType, int preBestScore, PPosition 
 		return bestResult.score;
 	}	
 	SearchType searchType = chessType == computerChessType ? SEARCH_MAX : SEARCH_MIN;
-	int bestScore = searchType == SEARCH_MAX ? (MIN_SCORE - 1) : (MAX_SCORE + 1);
-	int bestRow, bestCol;
+	int bestScore = searchType == SEARCH_MAX ? (MIN_SCORE) : (MAX_SCORE);
+	int bestRow = 0, bestCol = 0;
 	bool useAlphaBetaPurning = false;
 	for (int row = 0; row < NROWS; row++)
 		for (int col = 0; col < NCOLS; col++) {
@@ -73,7 +73,7 @@ int TicTacToe::getBestPosition(ChessType chessType, int preBestScore, PPosition 
 				int currentScore;
 				RESULT result;
 				if (gameOver(&result)) currentScore = score[result];
-				currentScore = getBestPosition(REVERSE_CHESS_TYPE(chessType), bestScore, pPosition);
+				else currentScore = getBestPosition(REVERSE_CHESS_TYPE(chessType), bestScore, pPosition);
 				board[row][col] = EMPTY;
 				switch (searchType) {
 				case SEARCH_MAX: {
@@ -113,6 +113,7 @@ bool TicTacToe::gameOver(RESULT * pResult)
 	//Check rows
 	for (int row = 0; row < NROWS; row++) {
 		bool flag = true;
+		if (board[row][0] == EMPTY) continue;
 		for (int col = 0; col < NCOLS; col++) {
 			if (board[row][col] != board[row][0]) {
 				flag = false;
@@ -127,6 +128,7 @@ bool TicTacToe::gameOver(RESULT * pResult)
 	//check columns
 	for (int col = 0; col < NCOLS; col++) {
 		bool flag = true;
+		if (board[0][col] == EMPTY) continue;
 		for (int row = 0; row < NROWS; row++) {
 			if (board[row][col] != board[0][col]) {
 				flag = false;
@@ -140,21 +142,27 @@ bool TicTacToe::gameOver(RESULT * pResult)
 	}
 	//check diagnose
 	bool flag = true;
-	for (int i = 0; i < NROWS; i++)
-		if (board[i][i] != board[0][0]) {
-			flag = false;
-			break;
-		}
+	if (board[0][0] != EMPTY) {
+		for (int i = 0; i < NROWS; i++)
+			if (board[i][i] != board[0][0]) {
+				flag = false;
+				break;
+			}
+	}
+	else flag = false;
 	if (flag) {
 		(*pResult) = board[0][0] == computerChessType ? WIN : LOSE;
 		return true;
 	}
 	flag = true;
-	for (int i = 0; i < NROWS; i++)
-		if (board[i][NROWS - i - 1] != board[0][NROWS - 0 - 1]) {
-			flag = false;
-			break;
-		}
+	if (board[0][NROWS - 0 - 1] != EMPTY) {
+		for (int i = 0; i < NROWS; i++)
+			if (board[i][NROWS - i - 1] != board[0][NROWS - 0 - 1]) {
+				flag = false;
+				break;
+			}
+	}
+	else flag = false;
 	if (flag) {
 		(*pResult) = board[0][NROWS - 0 - 1] == computerChessType ? WIN : LOSE;
 		return true;
